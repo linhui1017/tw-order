@@ -1,3 +1,4 @@
+
 const stationList=['南港', '台北', '板橋', '桃園' ,'新竹' ,'苗栗' ,'台中' ,'彰化' ,'雲林' ,'嘉義', '台南', '左營']
 const toTimeList = {
 '00:00':'1201A','00:30':'1230A','05:00':'500A','05:30':'530A','06:00':'600A','06:30':'630A',
@@ -10,32 +11,25 @@ const toTimeList = {
 };
 const ticketAmountList ={
   '1':'1F',  '2':'2F',  '3':'3F',  '4':'4F',
-  '5':'5F',  '6':'6F',  '7':'7F',  '8':'8F',
 }
-
-const reloadTime =10000;
+const reloadTime =5000;
 var timeoutID =0;
-
-
+var tkIndex = 0;
 const order_info ={
-  'selectStartStation' : '台北',
-  'selectDestinationStation' : '板橋',
-  'section_subtitle':'#bookingMethod_1', //直接輸入車次號碼:#bookingMethod_1, 依時間搜尋合適車次:#bookingMethod_0
-  'toTimeInputField':'2022/02/02',
-  'toTimeTable':'06:30',
-  'toTrainIDInputField':'1309',
+  'selectStartStation' : '嘉義',
+  'selectDestinationStation' : '台北',
+  'section_subtitle':'#bookingMethod_0', //直接輸入車次號碼:#bookingMethod_1, 依時間搜尋合適車次:#bookingMethod_0
+  'toTimeInputField':'2022/06/05',
+  'toTimeTable':'15:00',
+  'toTrainIDInputField':'850',
   'ticketAmount':'1',
-  'idNumber':'',
-  'mobilePhone':'',
-  'name2622':'',
-  'msNumber':'',
-  
+  'idNumber':'F125488195',
+  'mobilePhone':'0932258832',
+  'name2622':'s9043044@gmail.com',
+  'msNumber':'F125488195',
+  'toTrainIDs':['850', '850', '850'],
 }
-
-
-
 let setPage1Data = ()=> {
-  //起訖站
  let selectStartStation = $('select[name="selectStartStation"]')
  let selectDestinationStation =  $('select[name="selectDestinationStation"]')
  selectStartStation.val(stationList.indexOf(order_info['selectStartStation'])+1);
@@ -46,36 +40,32 @@ let setPage1Data = ()=> {
  //訂位方式
  let bookingMethod = $(order_info['section_subtitle'])
  bookingMethod.click();
- 
- //直接輸入車次號碼:#bookingMethod_1
+  //直接輸入車次號碼:#bookingMethod_1
  if(order_info['section_subtitle'] === '#bookingMethod_1')
  {
     let toTrainIDInputField = $('input[name="toTrainIDInputField"]')
-    toTrainIDInputField.val(order_info['toTrainIDInputField']);
+    //toTrainIDInputField.val(order_info['toTrainIDInputField']);
+    toTrainIDInputField.val(order_info['toTrainIDs'][2]);
  }
- 
  if(order_info['section_subtitle'] === '#bookingMethod_0')
  {
     let toTimeTable = $('select[name="toTimeTable"]')
     toTimeTable.val(toTimeList[order_info['toTimeTable']]);
  }
-
  //票數
  let ticketAmount = $('select[name="ticketPanel:rows:0:ticketAmount"]')
  ticketAmount.val(ticketAmountList[order_info['ticketAmount']]);
-
 };
-
-
 let startRun = ()=> {
   let SubmitButton = $('#SubmitButton');
   let onPage1 = SubmitButton && SubmitButton.attr("value")==='開始查詢';
-  let securityInput = $('#securityCode');
+  let securityInput = $('input[name="homeCaptcha:securityCode"]')[0];
+ 
   if(onPage1 && securityInput)
   {
     console.log(1,'開始查詢');
     clearTimeout(timeoutID);
-    if(securityInput.val() && securityInput.val().length === 4)
+    if(securityInput.value && securityInput.value.length === 4)
     {
       setPage1Data();
       let SubmitButton = $('#SubmitButton');
@@ -91,25 +81,22 @@ let startRun = ()=> {
     }
   }
 };
-
 let page1exe = ()=> {
   timeoutID = window.setTimeout(startRun, reloadTime);
 };
-
 let page2exe = ()=> {
   let comformButton = $('input[name="SubmitButton"]')
   if(comformButton && comformButton.attr("value")==='確認車次')
   {
-   console.log(2, 'into page2')
-   comformButton.click();
+    console.log(2, 'into page2');
+    comformButton.click();
   }
 };
-
 let page3exe = ()=> {
   let isSubmit = $('#isSubmit')
   if(isSubmit && isSubmit.attr("value")==='完成訂位')
   {
-     console.log(3, 'into page3')
+    console.log(3, 'into page3')
     let idNumber = $('#idNumber');
     idNumber.val(order_info['idNumber']);
   
@@ -123,18 +110,15 @@ let page3exe = ()=> {
      //memberSystemCheckBox.click();
      //let msNumber = $('#msNumber');
      //msNumber.val(order_info['msNumber']);
-     
      let agree = $('input[name="agree"]');
      agree.click();
      isSubmit.click();
   {
-  
 }
   }
 };
 
 let run = ()=> {
-  
   //直接輸入車次號碼:#bookingMethod_1
   if(order_info['section_subtitle'] === '#bookingMethod_1')
   {
@@ -146,7 +130,6 @@ let run = ()=> {
     page2exe();
   }
   page1exe();
-  
 }
 
 run();
