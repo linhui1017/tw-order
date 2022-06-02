@@ -18,7 +18,7 @@ var tkIndex = 0;
 const order_info ={
   'selectStartStation' : '嘉義',
   'selectDestinationStation' : '台北',
-  'section_subtitle':'#bookingMethod_0', //直接輸入車次號碼:#bookingMethod_1, 依時間搜尋合適車次:#bookingMethod_0
+  'section_subtitle':1, //直接輸入車次號碼:#bookingMethod_1, 依時間搜尋合適車次:#bookingMethod_0
   'toTimeInputField':'2022/06/05',
   'toTimeTable':'15:00',
   'toTrainIDInputField':'850',
@@ -27,7 +27,7 @@ const order_info ={
   'mobilePhone':'0932258832',
   'name2622':'s9043044@gmail.com',
   'msNumber':'F125488195',
-  'toTrainIDs':['850', '850', '850'],
+  'toTrainIDs':['1652', '654', '1318', '0834', '0838'],
 }
 let setPage1Data = ()=> {
  let selectStartStation = $('select[name="selectStartStation"]')
@@ -38,16 +38,16 @@ let setPage1Data = ()=> {
  let toTimeInputField = $('#toTimeInputField');
  toTimeInputField.val(order_info['toTimeInputField']);
  //訂位方式
- let bookingMethod = $(order_info['section_subtitle'])
+ let bookingMethod = $('input[name="bookingMethod"]')[order_info['section_subtitle']]
  bookingMethod.click();
   //直接輸入車次號碼:#bookingMethod_1
- if(order_info['section_subtitle'] === '#bookingMethod_1')
+ if(order_info['section_subtitle'] === 1)
  {
     let toTrainIDInputField = $('input[name="toTrainIDInputField"]')
     //toTrainIDInputField.val(order_info['toTrainIDInputField']);
-    toTrainIDInputField.val(order_info['toTrainIDs'][2]);
+    toTrainIDInputField.val(order_info['toTrainIDs'][Math.floor(Math.random() * order_info['toTrainIDs'].length)]);
  }
- if(order_info['section_subtitle'] === '#bookingMethod_0')
+ if(order_info['section_subtitle'] === 0)
  {
     let toTimeTable = $('select[name="toTimeTable"]')
     toTimeTable.val(toTimeList[order_info['toTimeTable']]);
@@ -120,11 +120,11 @@ let page3exe = ()=> {
 
 let run = ()=> {
   //直接輸入車次號碼:#bookingMethod_1
-  if(order_info['section_subtitle'] === '#bookingMethod_1')
+  if(order_info['section_subtitle'] === 1)
   {
     page3exe();
   }
-  if(order_info['section_subtitle'] === '#bookingMethod_0')
+  if(order_info['section_subtitle'] === 0)
   {
     page3exe();
     page2exe();
@@ -133,7 +133,3 @@ let run = ()=> {
 }
 
 run();
-
-
-
-
